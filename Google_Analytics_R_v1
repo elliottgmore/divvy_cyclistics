@@ -1,0 +1,442 @@
+# Get the data from here
+# https://divvy-tripdata.s3.amazonaws.com/index.html
+
+# Need to install, then load, packages in order to use the functions within
+install.packages("tidyverse")
+library("tidyverse") # this loads the package
+install.packages("scales")
+library("scales")
+
+# Setting correct working directory
+getwd()
+setwd("G:/My Drive/Education/Google Data Analytics Professional Certificate/Capstone/Raw_Data")
+
+
+#=====================
+# STEP 1: COLLECT DATA
+#=====================
+
+#unzipping the data, edit the file name only
+setwd("G:/My Drive/Education/Google Data Analytics Professional Certificate/Capstone/Raw_Data")
+outDir<-"G:/My Drive/Education/Google Data Analytics Professional Certificate/Capstone/Ready_Data"
+zipF<- "202312-divvy-tripdata.zip"
+unzip(zipF,exdir=outDir)
+
+# importing data into individual DFs
+setwd("G:/My Drive/Education/Google Data Analytics Professional Certificate/Capstone/Ready_Data")
+trips_q1_2019 <- read_csv("Divvy_Trips_2019_Q1.csv")
+trips_q2_2019 <- read_csv("Divvy_Trips_2019_Q2.csv")
+trips_q3_2019 <- read_csv("Divvy_Trips_2019_Q3.csv")
+trips_q4_2019 <- read_csv("Divvy_Trips_2019_Q4.csv")
+trips_q1_2020 <- read_csv("Divvy_Trips_2020_Q1.csv")
+trips_m4_2020 <- read_csv("202004-divvy-tripdata.csv")
+trips_m5_2020 <- read_csv("202005-divvy-tripdata.csv")
+trips_m6_2020 <- read_csv("202006-divvy-tripdata.csv")
+trips_m7_2020 <- read_csv("202007-divvy-tripdata.csv")
+trips_m8_2020 <- read_csv("202008-divvy-tripdata.csv")
+trips_m9_2020 <- read_csv("202009-divvy-tripdata.csv")
+trips_m10_2020 <- read_csv("202010-divvy-tripdata.csv")
+trips_m11_2020 <- read_csv("202011-divvy-tripdata.csv")
+trips_m12_2020 <- read_csv("202012-divvy-tripdata.csv")
+trips_m1_2021 <- read_csv("202101-divvy-tripdata.csv")
+trips_m2_2021 <- read_csv("202102-divvy-tripdata.csv")
+trips_m3_2021 <- read_csv("202103-divvy-tripdata.csv")
+trips_m4_2021 <- read_csv("202104-divvy-tripdata.csv")
+trips_m5_2021 <- read_csv("202105-divvy-tripdata.csv")
+trips_m6_2021 <- read_csv("202106-divvy-tripdata.csv")
+trips_m7_2021 <- read_csv("202107-divvy-tripdata.csv")
+trips_m8_2021 <- read_csv("202108-divvy-tripdata.csv")
+trips_m9_2021 <- read_csv("202109-divvy-tripdata.csv")
+trips_m10_2021 <- read_csv("202110-divvy-tripdata.csv")
+trips_m11_2021 <- read_csv("202111-divvy-tripdata.csv")
+trips_m12_2021 <- read_csv("202112-divvy-tripdata.csv")
+trips_m1_2022 <- read_csv("202201-divvy-tripdata.csv")
+trips_m2_2022 <- read_csv("202202-divvy-tripdata.csv")
+trips_m3_2022 <- read_csv("202203-divvy-tripdata.csv")
+trips_m4_2022 <- read_csv("202204-divvy-tripdata.csv")
+trips_m5_2022 <- read_csv("202205-divvy-tripdata.csv")
+trips_m6_2022 <- read_csv("202206-divvy-tripdata.csv")
+trips_m7_2022 <- read_csv("202207-divvy-tripdata.csv")
+trips_m8_2022 <- read_csv("202208-divvy-tripdata.csv")
+trips_m9_2022 <- read_csv("202209-divvy-publictripdata.csv")
+trips_m10_2022 <- read_csv("202210-divvy-tripdata.csv")
+trips_m11_2022 <- read_csv("202211-divvy-tripdata.csv")
+trips_m12_2022 <- read_csv("202212-divvy-tripdata.csv")
+trips_m1_2023 <- read_csv("202301-divvy-tripdata.csv")
+trips_m2_2023 <- read_csv("202302-divvy-tripdata.csv")
+trips_m3_2023 <- read_csv("202303-divvy-tripdata.csv")
+trips_m4_2023 <- read_csv("202304-divvy-tripdata.csv")
+trips_m5_2023 <- read_csv("202305-divvy-tripdata.csv")
+trips_m6_2023 <- read_csv("202306-divvy-tripdata.csv")
+trips_m7_2023 <- read_csv("202307-divvy-tripdata.csv")
+trips_m8_2023 <- read_csv("202308-divvy-tripdata.csv")
+trips_m9_2023 <- read_csv("202309-divvy-tripdata.csv")
+trips_m10_2023 <- read_csv("202310-divvy-tripdata.csv")
+trips_m11_2023 <- read_csv("202311-divvy-tripdata.csv")
+trips_m12_2023 <- read_csv("202312-divvy-tripdata.csv")
+
+#====================================================
+# STEP 2: WRANGLE DATA AND COMBINE INTO A SINGLE FILE
+#====================================================
+
+# Correcting column names to align to 2020 format (which is consistent through to 2023)
+trips_q4_2019 <- rename(trips_q4_2019
+                        ,ride_id = trip_id
+                        ,rideable_type = bikeid 
+                        ,started_at = start_time  
+                        ,ended_at = end_time  
+                        ,start_station_name = from_station_name 
+                        ,start_station_id = from_station_id 
+                        ,end_station_name = to_station_name 
+                        ,end_station_id = to_station_id 
+                        ,member_casual = usertype)
+
+trips_q3_2019 <- rename(trips_q3_2019
+                        ,ride_id = trip_id
+                        ,rideable_type = bikeid 
+                        ,started_at = start_time  
+                        ,ended_at = end_time  
+                        ,start_station_name = from_station_name 
+                        ,start_station_id = from_station_id 
+                        ,end_station_name = to_station_name 
+                        ,end_station_id = to_station_id 
+                        ,member_casual = usertype)
+
+trips_q2_2019 <- rename(trips_q2_2019
+                        ,ride_id = "01 - Rental Details Rental ID"
+                        ,rideable_type = "01 - Rental Details Bike ID" 
+                        ,started_at = "01 - Rental Details Local Start Time"  
+                        ,ended_at = "01 - Rental Details Local End Time"  
+                        ,start_station_name = "03 - Rental Start Station Name" 
+                        ,start_station_id = "03 - Rental Start Station ID"
+                        ,end_station_name = "02 - Rental End Station Name" 
+                        ,end_station_id = "02 - Rental End Station ID"
+                        ,member_casual = "User Type")
+
+trips_q1_2019 <- rename(trips_q1_2019
+                        ,ride_id = trip_id
+                        ,rideable_type = bikeid 
+                        ,started_at = start_time  
+                        ,ended_at = end_time  
+                        ,start_station_name = from_station_name 
+                        ,start_station_id = from_station_id 
+                        ,end_station_name = to_station_name 
+                        ,end_station_id = to_station_id 
+                        ,member_casual = usertype)
+
+# Convert ride_id and rideable_type to character so that they can stack correctly
+trips_q4_2019 <- mutate(trips_q4_2019,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_q3_2019 <- mutate(trips_q3_2019,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_q2_2019 <- mutate(trips_q2_2019,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_q1_2019 <- mutate(trips_q1_2019,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_q1_2020 <- mutate(trips_q1_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_m4_2020 <- mutate(trips_m4_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_m5_2020 <- mutate(trips_m5_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_m6_2020 <- mutate(trips_m6_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_m7_2020 <- mutate(trips_m7_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_m8_2020 <- mutate(trips_m8_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_m9_2020 <- mutate(trips_m9_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_m10_2020 <- mutate(trips_m10_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+trips_m11_2020 <- mutate(trips_m11_2020,ride_id = as.character(ride_id),rideable_type = as.character(rideable_type),start_station_id = as.character(start_station_id),end_station_id = as.character(end_station_id))
+
+
+str(trips_m9_2023)
+
+# Stack individual quarter's data frames into one big data frame
+all_trips <- bind_rows(
+  trips_q1_2019,
+  trips_q2_2019,
+  trips_q3_2019,
+  trips_q4_2019,
+  trips_q1_2020,
+  trips_m4_2020,
+  trips_m5_2020,
+  trips_m6_2020,
+  trips_m7_2020,
+  trips_m8_2020,
+  trips_m9_2020,
+  trips_m10_2020,
+  trips_m11_2020,
+  trips_m12_2020,
+  trips_m1_2021,
+  trips_m2_2021,
+  trips_m3_2021,
+  trips_m4_2021,
+  trips_m5_2021,
+  trips_m6_2021,
+  trips_m7_2021,
+  trips_m8_2021,
+  trips_m9_2021,
+  trips_m10_2021,
+  trips_m11_2021,
+  trips_m12_2021,
+  trips_m1_2022,
+  trips_m2_2022,
+  trips_m3_2022,
+  trips_m4_2022,
+  trips_m5_2022,
+  trips_m6_2022,
+  trips_m7_2022,
+  trips_m8_2022,
+  trips_m9_2022,
+  trips_m10_2022,
+  trips_m11_2022,
+  trips_m12_2022,
+  trips_m1_2023,
+  trips_m2_2023,
+  trips_m3_2023,
+  trips_m4_2023,
+  trips_m5_2023,
+  trips_m6_2023,
+  trips_m7_2023,
+  trips_m8_2023,
+  trips_m9_2023,
+  trips_m10_2023,
+  trips_m11_2023,
+  trips_m12_2023,
+  
+)
+
+# Remove all the unnecessary dfs
+rm(
+  trips_q1_2019,
+  trips_q2_2019,
+  trips_q3_2019,
+  trips_q4_2019,
+  trips_q1_2020,
+  trips_m4_2020,
+  trips_m5_2020,
+  trips_m6_2020,
+  trips_m7_2020,
+  trips_m8_2020,
+  trips_m9_2020,
+  trips_m10_2020,
+  trips_m11_2020,
+  trips_m12_2020,
+  trips_m1_2021,
+  trips_m2_2021,
+  trips_m3_2021,
+  trips_m4_2021,
+  trips_m5_2021,
+  trips_m6_2021,
+  trips_m7_2021,
+  trips_m8_2021,
+  trips_m9_2021,
+  trips_m10_2021,
+  trips_m11_2021,
+  trips_m12_2021,
+  trips_m1_2022,
+  trips_m2_2022,
+  trips_m3_2022,
+  trips_m4_2022,
+  trips_m5_2022,
+  trips_m6_2022,
+  trips_m7_2022,
+  trips_m8_2022,
+  trips_m9_2022,
+  trips_m10_2022,
+  trips_m11_2022,
+  trips_m12_2022,
+  trips_m1_2023,
+  trips_m2_2023,
+  trips_m3_2023,
+  trips_m4_2023,
+  trips_m5_2023,
+  trips_m6_2023,
+  trips_m7_2023,
+  trips_m8_2023,
+  trips_m9_2023,
+  trips_m10_2023,
+  trips_m11_2023,
+  trips_m12_2023,
+)
+
+# Remove lat, long, birthyear, and gender fields as this data was dropped beginning in 2020
+all_trips <- all_trips %>%  
+  select(-c(start_lat, start_lng, end_lat, end_lng, birthyear, tripduration, gender, "01 - Rental Details Duration In Seconds Uncapped", "Member Gender", "05 - Member Details Member Birthday Year"))
+
+
+#======================================================
+# STEP 3: CLEAN UP AND ADD DATA TO PREPARE FOR ANALYSIS
+#======================================================
+
+# Inspect the new table that has been created
+colnames(all_trips)  #List of column names
+nrow(all_trips)  #How many rows are in data frame?
+dim(all_trips)  #Dimensions of the data frame?
+head(all_trips)  #See the first 6 rows of data frame.  Also tail(qs_raw)
+str(all_trips)  #See list of columns and data types (numeric, character, etc)
+summary(all_trips)  #Statistical summary of data. Mainly for numerics
+sum(is.na(all_trips)) # checks for na values. If there are some, then need to find them and check import
+na_summary <- data.frame( Column_Name = names(colSums(is.na(all_trips))), NA_Count = colSums(is.na(all_trips))  ) #creates a summary table of where the na are
+
+#There are a few problems we will need to fix:
+# (1) In the "member_casual" column, there are two names for members ("member" and "Subscriber") and two names for casual riders ("Customer" and "casual"). We will need to consolidate that from four to two labels.
+
+unique(all_trips$member_casual) # to check unique values in that column 
+table(all_trips$member_casual) # to check numbers of unique values in that column
+all_trips <- all_trips %>% 
+  mutate(member_casual = recode(member_casual,"Subscriber"="member","Customer" = "casual"))
+
+# (2) The data can only be aggregated at the ride-level, which is too granular. We will want to add some additional columns of data -- such as day, month, year -- that provide additional opportunities to aggregate the data.
+all_trips$date <- as.Date(all_trips$started_at) #The default format is yyyy-mm-dd
+all_trips$month <- format(as.Date(all_trips$date), "%m")
+all_trips$day <- format(as.Date(all_trips$date), "%d")
+all_trips$year <- format(as.Date(all_trips$date), "%Y")
+all_trips$day_of_week <- format(as.Date(all_trips$date), "%A")
+
+# Add a "ride_length" calculation to all_trips (in seconds)
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/difftime.html
+all_trips$ride_length <- difftime(all_trips$ended_at,all_trips$started_at)
+
+# Inspect the structure of the columns
+str(all_trips)
+
+# Convert "ride_length" from Factor to numeric so we can run calculations on the data
+is.factor(all_trips$ride_length) # This is a check to return True or False
+all_trips$ride_length <- as.numeric(as.character(all_trips$ride_length))
+is.numeric(all_trips$ride_length)
+
+# Remove "bad" data
+# The dataframe includes a few hundred entries when bikes were taken out of docks and checked for quality by Divvy or ride_length was negative
+# We will create a new version of the dataframe (v2) since data is being removed
+# https://www.datasciencemadesimple.com/delete-or-drop-rows-in-r-with-conditions-2/
+# all_trips <- all_trips[!(all_trips$start_station_name == "HQ QR" | all_trips$ride_length<0),]  # '|' means 'or'
+# Note: no longer doing this, as I've already removed these columns, so I can't do this anymore.
+all_trips <- all_trips[!(all_trips$ride_length<0),]  # '|' means 'or'
+
+# Check have removed all bad data
+table(all_trips$day_of_week)
+table(all_trips$member_casual)
+table(all_trips$start_station_name == "HQ QR")
+table(all_trips$ride_length <0 )
+sum(is.na(all_trips)) # checks for na values. If there are some, then need to find them and check import
+
+
+#=====================================
+# STEP 4: CONDUCT DESCRIPTIVE ANALYSIS
+#=====================================
+# Descriptive analysis on ride_length (all figures in seconds)
+mean(all_trips$ride_length) #straight average (total ride length / rides)
+median(all_trips$ride_length) #midpoint number in the ascending array of ride lengths
+max(all_trips$ride_length) #longest ride
+min(all_trips$ride_length) #shortest ride
+
+# You can condense the four lines above to one line using summary() on the specific attribute
+summary(all_trips$ride_length)
+
+# Compare members and casual users
+aggregate(all_trips$ride_length ~ all_trips$member_casual, FUN = mean)
+aggregate(all_trips$ride_length ~ all_trips$member_casual, FUN = median)
+aggregate(all_trips$ride_length ~ all_trips$member_casual, FUN = max)
+aggregate(all_trips$ride_length ~ all_trips$member_casual, FUN = min)
+
+# See the average ride time by each day for members vs casual users
+aggregate(all_trips$ride_length ~ all_trips$member_casual + all_trips$day_of_week, FUN = mean)
+
+# Notice that the days of the week are out of order. Let's fix that.
+all_trips$day_of_week <- ordered(all_trips$day_of_week, levels=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
+# analyze ridership data by type and weekday, into a summary table
+all_trips_summarytable <- all_trips %>% 
+  mutate(weekday = wday(started_at, label = TRUE,week_start = 1 )) %>%  #creates weekday field using wday()
+  group_by(member_casual, weekday) %>%  #groups by usertype and weekday
+  summarise(number_of_rides = n()							#calculates the number of rides and average duration 
+  ,average_duration = mean(ride_length)) %>% 		# calculates the average duration
+  arrange(member_casual, weekday)								# sorts
+
+# Let's visualize the number of rides by rider type
+trips_by_type <- all_trips %>% 
+  mutate(weekday = wday(started_at, label = TRUE,week_start = 1)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()) %>% 
+  arrange(member_casual, weekday)
+
+ggplot(trips_by_type, aes(x = weekday, y = number_of_rides, fill = member_casual)) +
+  scale_fill_brewer(palette="Pastel1") +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = comma_format(big.mark = ",", decimal.mark = ".")) +
+  guides(fill = guide_legend(title = "")) +
+  theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) +
+  labs(title = "Daily trips across the week",
+       subtitle ="Aggregated data for 2019 to 2023",
+       caption = "2019 - 2023 data provided by Divvy", 
+       x = "",
+       y = "")+
+  annotate("text", x = 5.6, y = 2200000, label = "Insight 2: \nPeak casual use on weekends",
+           hjust = 0, vjust = 0.8, size = 3, color = "black",
+           family = "sans") +
+  annotate("rect", xmin=c(5.5), xmax=c(7.5),ymin=c(1500000), ymax=c(2000000), alpha=0, color="black", fill="white")+
+  annotate("text", x = 0.5, y = 1300000, label = "Insight 1: \nLowest casual usage at start of the week",
+           hjust = 0, vjust = 0.8, size = 3, color = "black",
+           family = "sans") +
+  annotate("rect", xmin=c(0.5), xmax=c(3.1),ymin=c(900000), ymax=c(1100000), alpha=0, color="black", fill="white")
+
+# Let's repeat that with only 2023 data to check assumption still holds
+trips_by_type_2023 <- all_trips %>% 
+  filter(year == 2023) %>%
+  mutate(weekday = wday(started_at, label = TRUE,week_start = 1)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()) %>% 
+  arrange(member_casual, weekday)
+
+ggplot(trips_by_type_2023, aes(x = weekday, y = number_of_rides, fill = member_casual)) +
+  scale_fill_brewer(palette="Pastel1") +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = comma_format(big.mark = ",", decimal.mark = ".")) +
+  guides(fill = guide_legend(title = "")) +
+  theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) +
+  labs(title = "Daily trips across the week",
+       subtitle ="Only 2023 data",
+       caption = "2023 data provided by Divvy", 
+       x = "",
+       y = "")
+
+# Let's create a visualization for average duration
+all_trips %>% 
+  mutate(weekday = wday(started_at, label = TRUE,week_start = 1)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()
+            ,average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, weekday)  %>% 
+  ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge")
+
+
+# Let's create a visualization across time
+all_trips %>% 
+  arrange(date) %>% # just in case not ordered already
+  summarise(number_of_rides = n()
+            ,average_duration = mean(ride_length)) %>%
+  ggplot(aes(x = date, y = count(ride_id))) +
+  geom_bar(position = "dodge")
+
+
+# Create a new data frame with the summary information
+trip_summary <- all_trips %>%
+  group_by(date,member_casual) %>%
+    summarize(number_of_trips = n())
+  
+ggplot(trip_summary, aes(x = date, y = number_of_trips, color=member_casual)) +
+  geom_line() + 
+  scale_y_continuous(labels = comma_format(big.mark = ",", decimal.mark = ".")) +
+  labs(title = "Evolution of Daily Trips Over Time",
+     caption = "Data provided by Divvy", 
+     x = "",
+     y = "",
+     color = "Member Type") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  facet_wrap(~member_casual)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),strip.text = element_text(size = 12, face = "bold", color = "black"))+
+  geom_smooth(method = "loess", se = FALSE)+
+  annotate("segment", x = as.Date("2020-03-01"), xend = as.Date("2022-04-01"), y = 20000, yend = 20000, color="gray", arrow = arrow(ends = "both", angle = 90, length = unit(.1,"cm"))) + 
+  annotate("text", x = as.Date("2021-03-01"), y = 20700, label= "Covid restrictions", color="gray",fontface = "italic", size = 3)
+
+#=================================================
+# STEP 5: EXPORT SUMMARY FILE FOR FURTHER ANALYSIS
+#=================================================
+# Create a csv file that we will visualize in Excel, Tableau, or my presentation software
+# N.B.: This file location is for a Mac. If you are working on a PC, change the file location accordingly (most likely "C:\Users\YOUR_USERNAME\Desktop\...") to export the data. You can read more here: https://datatofish.com/export-dataframe-to-csv-in-r/
+counts <- aggregate(all_trips$ride_length ~ all_trips$member_casual + all_trips$day_of_week, FUN = mean)
+write.csv(counts, file = 'Outputs.csv')
